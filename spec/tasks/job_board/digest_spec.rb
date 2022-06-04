@@ -21,4 +21,10 @@ RSpec.describe 'job_board:digest' do
       )
     end
   end
+
+  def stub_slack_client
+    client = instance_double(SlackClient, message_channel: nil)
+    allow(SlackClient).to receive(:new).and_return(client)
+    client
+  end
 end
