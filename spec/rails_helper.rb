@@ -36,7 +36,7 @@ rescue ActiveRecord::PendingMigrationError => e
   exit 1
 end
 
-Selenium::WebDriver::Chrome.driver_path='/usr/local/bin/chromedriver'
+# Selenium::WebDriver::Chrome.driver_path='/usr/local/bin/chromedriver'
 
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
