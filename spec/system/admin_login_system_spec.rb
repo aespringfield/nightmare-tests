@@ -2,11 +2,6 @@
 require 'rails_helper'
 
 RSpec.describe 'Admin login system', type: :system do
-
-  before do
-    driven_by(:rack_test)
-  end
-
   it 'enables me to register to WNB.rb as admin' do
     visit new_user_registration_path
 
@@ -15,6 +10,8 @@ RSpec.describe 'Admin login system', type: :system do
     fill_in 'Password', with: 'password'
     fill_in 'Password confirmation', with: 'password'
     click_button 'Sign up'
+
+    expect(true).to eq(false)
 
     expect(page).to have_text('Welcome!')
   end
