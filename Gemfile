@@ -37,6 +37,7 @@ end
 
 group :test do
   gem 'capybara', '>= 3.26'
+  gem 'capybara-screenshot'
   gem 'factory_bot_rails'
   gem 'selenium-webdriver'
   gem 'timecop'
