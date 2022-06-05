@@ -58,5 +58,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: test-failure-screenshots
-          path: tmp/screenshots/*.png
+          path: |
+            tmp/screenshots/*.png
+            tmp/capybara/*.png
 
