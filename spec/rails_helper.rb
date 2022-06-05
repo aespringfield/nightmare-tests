@@ -23,9 +23,9 @@ require 'rspec/rails'
 # require only the support files necessary.
 #
 Dir[Rails.root.join('spec', 'support', '**', '*.rb')].each { |f| require f }
-require 'capybara-screenshot/rspec'
-
-Capybara::Screenshot.prune_strategy = :keep_last_run
+# require 'capybara-screenshot/rspec'
+#
+# Capybara::Screenshot.prune_strategy = :keep_last_run
 
 # Checks for pending migrations and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove these lines.
