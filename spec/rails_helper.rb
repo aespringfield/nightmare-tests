@@ -75,6 +75,6 @@ RSpec.configure do |config|
   config.include Devise::Test::ControllerHelpers, type: :view
 
   config.before(:each, type: :system) do
-    driven_by :selenium_chrome
+    driven_by :selenium_chrome_headless
   end
 end
