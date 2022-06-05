@@ -11,8 +11,6 @@ RSpec.describe 'Admin login system', type: :system do
     fill_in 'Password confirmation', with: 'password'
     click_button 'Sign up'
 
-    expect(true).to eq(false)
-
     expect(page).to have_text('Welcome!')
   end
 
