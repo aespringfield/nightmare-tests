@@ -1,0 +1,30 @@
+.select {
+  position: relative;
+  line-height: 4rem;
+  width: 20em;
+
+  select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: none;
+    border-color: #4a4a4a;
+    border-radius: .125rem;
+    color: #4a4a4a;
+    box-shadow: none;
+    font-size: 1rem;
+    padding: 1rem;
+    margin: 0;
+    height: auto;
+  }
+
+  .visually-hidden {
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+  }
+}

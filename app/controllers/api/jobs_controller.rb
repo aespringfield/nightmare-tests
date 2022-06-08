@@ -7,8 +7,10 @@ module Api
     def index
       JWT.decode bearer_token, hmac_secret, true, { algorithm: 'HS256' }
 
-      jobs = Job.all
-      render status: 200, json: { data: jobs.order(sponsorship_level: :desc).as_json }
+      # sleep(5) # take a little snooze, make the tests break
+
+      jobs = sort_order ? Job.order(**sort_order) : Job.all
+      render status: 200, json: { data: jobs.as_json }
     rescue JWT::ExpiredSignature, JWT::DecodeError
       render status: 401, json: {}
     end
@@ -36,6 +38,19 @@ module Api
 
     def job_board_password
       ENV.fetch('JOB_BOARD_PASSWORD', nil)
+    end
+
+    def sort_order
+      case params[:order]
+      when 'most-recent'
+        {created_at: :desc}
+      when 'title'
+        {title: :asc}
+      when 'company'
+        {company: :asc}
+      else
+        nil
+      end
     end
   end
 end

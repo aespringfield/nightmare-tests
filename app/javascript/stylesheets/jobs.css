@@ -1,10 +1,13 @@
+.jobs-container {
+  @apply justify-center
+  md:max-w-[50rem]
+  lg:max-w-[73rem]
+  mx-auto;
+}
+
 .job-group {
     @apply flex
-      flex-row
-      flex-wrap
-      justify-center
-      md:justify-between
-      md:max-w-[50rem]
-      lg:max-w-[73rem]
-      mx-auto;
+    md:justify-between
+    flex-row
+    flex-wrap
 }

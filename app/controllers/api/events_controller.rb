@@ -26,18 +26,35 @@ module Api
 
     def upcoming
       events = Event.where('date > ?', DateTime.current).order(date: :asc)
-      events_by_date =
-        events
-          .group_by { |event| event.date.year }
-          .transform_values do |events_by_year|
-            events_by_year.group_by { |event| event.date.strftime('%B') }
-          end
+      events_by_date = group_by_year(events)
 
       if events.present?
         render status: 200, json: { data: events_by_date.as_json(include: :speakers) }
       else
         render status: 404, json: { data: 'No events found' }
       end
+    end
+
+    def search
+      render status: 200, json: run_search(params[:query]).as_json
+    end
+
+    def filter
+      render status: 200, json: group_by_year(run_search(params[:query])).as_json(include: [:event_speakers, :speakers])
+    end
+
+    private
+
+    def group_by_year(events)
+      events
+        .group_by { |event| event.date.year }
+        .transform_values do |events_by_year|
+          events_by_year.group_by { |event| event.date.strftime('%B') }
+      end
+    end
+
+    def run_search(term)
+      Event.search(term).results
     end
   end
 end

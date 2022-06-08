@@ -33,7 +33,9 @@ rescue ActiveRecord::PendingMigrationError => e
   exit 1
 end
 
-RSpec.configure do |config|
+Capybara.default_max_wait_time = 15
+
+  RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
@@ -70,7 +72,33 @@ RSpec.configure do |config|
   config.include Devise::Test::ControllerHelpers, type: :view
 
   config.before(:each, type: :system) do
-    Selenium::WebDriver::Chrome.driver_path = ENV['CHROMEDRIVER_PATH'] if ENV['CHROMEDRIVER_PATH']
-    driven_by :selenium_chrome_headless
+    driven_by :selenium_chrome
+    Selenium::WebDriver::Chrome::Service.driver_path = ENV['CHROMEDRIVER_PATH'] if ENV['CHROMEDRIVER_PATH']
   end
+
+  # remove character limit on RSpec output, so we have full information from flaky test failures in our pipelines
+  config.expect_with (:rspec) { |c| c.max_formatted_output_length = nil }
+
+  config.before(:each, slo_mo: true) do
+    page.driver.browser.network_conditions = {latency: 3000, throughput: 0, offline: false }
+  end
+
+  config.after(:each, slo_mo: true) do
+    page.driver.browser.network_conditions = {}
+  end
+
+  # print JavaScript errors if spec fails
+  config.after(:each, type: :system) do |example|
+    next unless example.exception
+
+    errors = page.driver.browser.manage.logs.get(:browser)
+    if errors.present?
+      errors.each do |error|
+        next unless error.level == 'WARNING' || error.level == 'SEVERE'
+        STDERR.puts "JavaScript error:\n#{error.to_s}"
+      end
+    end
+  end
+
+  # Kernel.srand(config.seed)
 end
