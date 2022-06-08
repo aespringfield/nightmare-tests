@@ -7,8 +7,6 @@ module Api
     def index
       JWT.decode bearer_token, hmac_secret, true, { algorithm: 'HS256' }
 
-      # sleep(5) # take a little snooze, make the tests break
-
       jobs = sort_order ? Job.order(**sort_order) : Job.all
       render status: 200, json: { data: jobs.as_json }
     rescue JWT::ExpiredSignature, JWT::DecodeError

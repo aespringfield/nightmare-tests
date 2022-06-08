@@ -17,7 +17,6 @@ module Admin
     end
 
     def create
-      sleep(7)
       @event = Event.create(required_params)
 
       unless @event.errors.present?
