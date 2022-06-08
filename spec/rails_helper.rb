@@ -65,9 +65,6 @@ Capybara.default_max_wait_time = 15
   # Filter lines from Rails gems in backtraces.
   config.filter_rails_from_backtrace!
 
-  # arbitrary gems may also be filtered via:
-  # config.filter_gems_from_backtrace("gem name")
-
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Devise::Test::ControllerHelpers, type: :view
 
@@ -95,10 +92,8 @@ Capybara.default_max_wait_time = 15
     if errors.present?
       errors.each do |error|
         next unless error.level == 'WARNING' || error.level == 'SEVERE'
-        STDERR.puts "JavaScript error:\n#{error.to_s}"
+        $stderr.puts "JavaScript error:\n#{error.to_s}"
       end
     end
   end
-
-  # Kernel.srand(config.seed)
 end
