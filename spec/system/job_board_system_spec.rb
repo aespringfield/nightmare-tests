@@ -34,8 +34,6 @@ describe 'Job board', type: :system do
     expect(job_cards[0]).to have_text(job2.title)
     expect(job_cards[1]).to have_text(job1.title)
     expect(job_cards[2]).to have_text(job3.title)
-
-    select 'Sort by: Most recent', from: 'Sort jobs'
   end
 end
 
