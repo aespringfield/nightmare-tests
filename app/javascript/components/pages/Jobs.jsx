@@ -4,6 +4,7 @@ import { useCookies } from 'react-cookie';
 import SharedLayout from 'components/layout/SharedLayout';
 import PageTitleWithContainer from 'components/PageTitleWithContainer';
 import Button from 'components/Button';
+import Select from 'components/Select';
 import Card from 'components/Card';
 import Banner from 'components/Banner';
 import LoadingSpinner from 'components/LoadingSpinner';
@@ -14,14 +15,16 @@ import 'stylesheets/page';
 import 'stylesheets/jobs';
 
 const Jobs = () => {
+    const INITIAL_SORT_ORDER = 'most-recent';
     const [loading, setLoading] = useState(true);
     const [jobs, setJobs] = useState([]);
+    const [sortOrder, setSortOrder] = useState(INITIAL_SORT_ORDER);
     const [cookies] = useCookies();
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const data = await getJobs(cookies['wnb_job_board_token']);
+                const data = await getJobs(cookies['wnb_job_board_token'], sortOrder);
                 setJobs(data);
                 setLoading(false);
             } catch (error) {
@@ -35,7 +38,7 @@ const Jobs = () => {
         };
 
         fetchData();
-    }, [cookies]);
+    }, [cookies, sortOrder]);
 
     const [firstSixJobs, restOfJobs] = useMemo(() => {
         if (jobs === []) {
@@ -54,36 +57,48 @@ const Jobs = () => {
             {loading ? (
                 <LoadingSpinner />
             ) : (
-                <>
-                    <JobGroup jobs={firstSixJobs} />
+                <div className="jobs-container">
+                    <Select
+                        onSelect={async (value) => {
+                            setSortOrder(value);
+                        }}
+                        defaultValue={sortOrder}
+                        options={[
+                            {
+                                value: 'most-recent',
+                                label: 'Sort by: Most recent',
+                            },
+                            {
+                                value: 'company',
+                                label: 'Sort by: Company',
+                            },
+                            {
+                                value: 'title',
+                                label: 'Sort by: Title',
+                            },
+                        ]}
+                    ></Select>
+                    <JobGroup sortOrder={sortOrder}>
+                        {firstSixJobs.map((job, i) => (
+                            <Job key={job.id} htmlId={`job-card-${i}`} {...job} />
+                        ))}
+                    </JobGroup>
                     <SponsorUsBanner />
-                    <JobGroup jobs={restOfJobs} />
-                </>
+                    <JobGroup>
+                        {restOfJobs.map((job) => (
+                            <Job key={`${job.title}-${job.company}`} {...job} />
+                        ))}
+                    </JobGroup>
+                </div>
             )}
         </SharedLayout>
     );
 };
 
-const JobGroup = ({ jobs }) => {
-    return (
-        <div className="job-group">
-            {jobs.map((job) => (
-                <Job
-                    key={`${job.title} at ${job.company}`}
-                    company={job.company}
-                    title={job.title}
-                    description={job.description}
-                    imageUrl={job.image_url}
-                    link={job.link}
-                    location={job.location}
-                />
-            ))}
-        </div>
-    );
-};
+const JobGroup = ({ children }) => <div className="job-group">{children}</div>;
 
 JobGroup.propTypes = {
-    jobs: propTypes.array,
+    children: propTypes.node,
 };
 
 const SponsorUsBanner = () => {
@@ -99,14 +114,14 @@ const SponsorUsBanner = () => {
     );
 };
 
-const Job = ({ title, description, imageUrl, company, link, location }) => {
+const Job = ({ htmlId, title, description, imageUrl, company, link, location }) => {
     return (
-        <Card className="mx-0 my-5 md:mr-8 max-w-[22rem]">
+        <Card id={htmlId} className="job-card mx-0 my-5 md:mr-8 max-w-[22rem]">
             <div className="flex flex-row">
                 <img className="w-14 h-14 shadow-sm rounded-full mr-6" src={imageUrl} alt="" />
                 <div className="flex flex-col">
                     <h2 className="font-bold text-lg text-[#4a4a4a]">{title}</h2>
-                    <div className="mt-1">{company}</div>
+                    <div className="company mt-1">{company}</div>
                     <div className="font-light">{location}</div>
                 </div>
             </div>
@@ -125,6 +140,7 @@ const Job = ({ title, description, imageUrl, company, link, location }) => {
 export default Jobs;
 
 Job.propTypes = {
+    htmlId: propTypes.string,
     title: propTypes.string,
     description: propTypes.string,
     company: propTypes.string,

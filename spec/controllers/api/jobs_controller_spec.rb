@@ -43,7 +43,8 @@ RSpec.describe Api::JobsController, type: :controller do
         JWT.encode({ data: '', exp: (Time.now + 1.day).to_i }, ENV.fetch('JWT_HMAC_SECRET', nil), 'HS256')
       end
 
-      before { 3.times { FactoryBot.create(:job) } }
+      let!(:job1) { create(:job) }
+      before { FactoryBot.create_list(:job, 2, created_at: 3.months.ago) }
 
       it 'correctly renders past events' do
         get :index
@@ -54,11 +55,11 @@ RSpec.describe Api::JobsController, type: :controller do
         expect(body['data'].length).to eq(3)
         expect(body['data'].first).to include(
           {
-            company: 'WNB.rb',
-            title: 'Organizer',
-            description: 'Organize WNB.rb',
-            link: 'link-to-job.com',
-            location: 'Remote',
+            company: job1.company,
+            title: job1.title,
+            description: job1.description,
+            link: job1.link,
+            location: job1.location,
           }.stringify_keys,
         )
         expect(body['data'].first).not_to have_key('sponsorship_level')

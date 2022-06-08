@@ -10,6 +10,22 @@ module Admin
                      .order(date: :desc)
     end
 
+    def new
+      authorize Event
+
+      @event = Event.new
+    end
+
+    def create
+      @event = Event.create(required_params)
+
+      unless @event.errors.present?
+        redirect_to admin_events_path
+      else
+        render :edit
+      end
+    end
+
     def edit
       authorize Event
 
@@ -46,12 +62,17 @@ module Admin
     private
 
     def required_type
-      params[:meetup].present? ? params.require(:meetup) : params.require(:panel)
+      if params[:meetup].present?
+        params.require(:meetup)
+      elsif params[:panel].present?
+        params.require(:panel)
+      else
+        params.require(:event)
+      end
     end
 
     def required_params
-      required_type.permit(
-        :title,
+      required_type.permit(:title,
         :location,
         :description,
         'date(1i)',

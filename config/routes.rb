@@ -25,6 +25,8 @@ Rails.application.routes.draw do
         get 'past'
         get '/:year/:month', to: 'events#past_by_month'
         get 'upcoming'
+        get 'search'
+        get 'filter'
       end
     end
 
@@ -34,7 +36,7 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
-    resources :events, only: %i[index edit update destroy]
+    resources :events
   end
 
   mount ActionCable.server => '/cable'

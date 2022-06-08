@@ -6,6 +6,8 @@ import LoadingSpinner from 'components/LoadingSpinner';
 import PageTitleWithContainer from 'components/PageTitleWithContainer';
 import 'stylesheets/page';
 import 'stylesheets/meetup';
+import SelectSearchable from "../SelectSearchable";
+import axios from "axios";
 
 const YearSection = ({ children, year }) => (
     <section key={year} className="p-10">
@@ -98,6 +100,7 @@ const Meetups = () => {
     useEffect(() => {
         const fetchData = async () => {
             const data = await getPastMeetups();
+            console.log(data)
             setMeetupsByYear(Object.entries(data));
             setLoading(false);
         };
@@ -112,6 +115,18 @@ const Meetups = () => {
                 <LoadingSpinner />
             ) : (
                 <div className="container flex flex-col mx-auto md:max-w-[50rem] lg:max-w-[73rem]">
+                    <SelectSearchable
+                        // label="Meetup Name or Speaker"
+                        recordSearchPath="/api/events/search"
+                        name="meetup"
+                        onFilter={(searchTerm) => {
+                            axios.get('/api/events/filter', { params: { query: searchTerm } })
+                                .then(({ data }) => {
+                                    console.log(data)
+                                    setMeetupsByYear(Object.entries(data))
+                                })
+                        }}
+                    />
                     {meetupsByYear.length > 0
                         ? meetupsByYear.reverse().map(([year, meetupsByMonth]) => {
                               return (

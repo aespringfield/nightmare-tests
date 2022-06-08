@@ -29,3 +29,47 @@
 .meetups__month:last-of-type > .meetups__card--border::before {
   top: 14px;
 }
+
+.select-searchable-container {
+  margin: 0 auto;
+  width: 400px;
+}
+
+
+.select-searchable input {
+  width: 100%;
+  border-color: #F37D7B;
+}
+
+.select-searchable-button {
+  margin-top: 10px;
+  width: 75px;
+  float: right;
+  padding: 10px 20px;
+}
+
+.search-results {
+  z-index: 1;
+  position: absolute;
+  width: 400px;
+  background-color: white;
+  box-shadow: 0 3px 8px rgba(50, 50, 50, 0.17);
+}
+
+.search-result {
+  padding: 10px 20px;
+}
+
+.search-result:hover {
+  cursor: pointer;
+}
+
+.visually-hidden {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}

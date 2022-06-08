@@ -14,6 +14,8 @@ gem 'rails', '~> 7.0'
 gem 'sass-rails', '>= 6'
 gem 'slack-ruby-client'
 gem 'webpacker', '~> 5.4.0'
+gem "searchkick"
+gem "elasticsearch", "< 7.14"
 
 gem 'bootsnap', '>= 1.4.4', require: false
 gem 'jwt'
@@ -40,6 +42,7 @@ group :test do
   gem 'capybara-screenshot'
   gem 'dotenv-rails'
   gem 'factory_bot_rails'
+  gem 'faker'
   gem 'selenium-webdriver'
   gem 'timecop'
   gem 'webdrivers'
