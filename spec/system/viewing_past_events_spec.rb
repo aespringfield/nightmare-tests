@@ -12,6 +12,7 @@ describe 'Past events', type: :system do
     visit meetups_path
 
     fill_in 'Meetup Name', with: 'ruby'
+    sleep(3)
     click_button 'Filter'
 
     expect(page).to have_text(event1.title)

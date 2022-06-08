@@ -31,6 +31,7 @@ describe 'Job board', type: :system do
     expect(job_cards[2]).to have_text(job3.title)
 
     select 'Sort by: Company', from: 'Sort jobs'
+    job_cards = all('.job-card')
     expect(job_cards[0]).to have_text(job2.title)
     expect(job_cards[1]).to have_text(job1.title)
     expect(job_cards[2]).to have_text(job3.title)
