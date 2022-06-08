@@ -69,7 +69,7 @@ Capybara.default_max_wait_time = 15
   config.include Devise::Test::ControllerHelpers, type: :view
 
   config.before(:each, type: :system) do
-    driven_by :selenium_chrome
+    driven_by :selenium_chrome_headless
     Selenium::WebDriver::Chrome::Service.driver_path = ENV['CHROMEDRIVER_PATH'] if ENV['CHROMEDRIVER_PATH']
   end
 
