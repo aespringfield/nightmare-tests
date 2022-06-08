@@ -5,6 +5,7 @@ module Api
     skip_before_action :verify_authenticity_token, only: [:authenticate]
 
     def index
+      sleep(8)
       JWT.decode bearer_token, hmac_secret, true, { algorithm: 'HS256' }
 
       jobs = sort_order ? Job.order(**sort_order) : Job.all
